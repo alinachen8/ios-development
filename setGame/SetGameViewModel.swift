@@ -8,14 +8,12 @@
 import SwiftUI
 
 
-class SetGameViewModel {
-  private var model: SetGame =
-    SetGame(numberOfPairsOfCards: 5) { pairIndex in
-//      "🫐"
-    }
+class SetGameViewModel: ObservableObject {
+  private var model: SetGame = SetGame()
   
   var cards: Array<SetGame.Card> {
     return model.cards
   }
+//
   
 }

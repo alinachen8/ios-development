@@ -8,7 +8,9 @@
 import SwiftUI
 
 struct ContentView: View {
+  @ObservedObject var viewModel: SetGameViewModel
   var emojis:[String] = ["🥯", "🍳", "🍛","🧉","🥮", "🍑", "🫐", "🥑", "🍱", "🧋", "🎢", "🚗", "🚂", "🚃", "🚄", "🚅", "🚆", "🚇", "🚈", "🚉", "🚊", "🚝", "🚞", "🚋", "🚌"]
+//  var shapes = (Circle(), Rectangle(), Diamond())
     @State var emojiCount = 12
     var body: some View {
       ScrollView {
@@ -16,10 +18,13 @@ struct ContentView: View {
           Text("Set").font(.largeTitle)
           dealCards
           LazyVGrid(columns: [GridItem(), GridItem(), GridItem()], content: {
-            ForEach(emojis[0..<emojiCount], id: \.self) { emoji in
-              CardView(content: emoji).aspectRatio(2/3, contentMode:.fit)
+            ForEach(viewModel.cards, id: \.self) { card in
+              CardView(card: card).aspectRatio(2/3, contentMode: .fit)
             }
-          }).padding(.horizontal).foregroundColor(.red)
+//            ForEach(emojis[0..<emojiCount], id: \.self) { emoji in
+//              CardView(content: emoji).aspectRatio(2/3, contentMode:.fit)
+//            }
+          }).padding(.horizontal)
           Spacer()
         }
       }
@@ -44,19 +49,30 @@ struct ContentView: View {
 }
 
 struct CardView: View {
-    var content: String
+    var card: SetGame.Card
     var body: some View {
       ZStack {
         let shape = RoundedRectangle(cornerRadius: 20)
         shape.fill().foregroundColor(.white)
         shape.stroke(lineWidth: 3)
-        Text(content).font(.largeTitle)
+//        put a switch here for view 
+//        Diamond.stroke().foregroundColor(.green).padding(5)
+        switch card.shape {
+          case .diamond:
+            Diamond().stroke().foregroundColor(.green).padding(5)
+          case .rectangle:
+            Rectangle().stroke().foregroundColor(.green).padding(5)
+          case .circle:
+            Circle().stroke().foregroundColor(.green).padding(5)
+        }
+//        Text(shapeContent).font(.largeTitle)
       }
     }
 }
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-      ContentView().preferredColorScheme(.light)
+      let game = SetGameViewModel()
+      ContentView(viewModel: game).preferredColorScheme(.light)
     }
 }

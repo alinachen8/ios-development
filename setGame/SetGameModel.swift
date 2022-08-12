@@ -14,26 +14,36 @@ struct SetGame {
     
   }
   
-  init(numberOfPairsOfCards: Int, createCardContent: (Int) -> Shape) {
+  init() {
+//  init(numberOfPairsOfCards: Int, createCardContent: (Int) -> Shape) {
     cards = Array<Card>()
-    for pairIndex in 0..<numberOfPairsOfCards {
-      let content: Shape = createCardContent(pairIndex)
-//      cards.append(Card(content: content))
-//      cards.append(Card(content: content))
+// do all cases through enums and populate the cards array
+    for shape in ShapeOptions.allCases {
+      for shading in Shading.allCases {
+        for numberOfShapes in Repeats.allCases {
+          for colorName in ColorChoice.allCases {
+            let card = Card(shape: shape, shading: shading, numberOfShapes: numberOfShapes, colorName: colorName)
+            cards.append(card)
+          }
+        }
+      }
     }
+    
+    print(cards.count)
+    
   }
   
-  struct Card {
+  struct Card: Hashable {
     var isSelected: Bool = false
     var isMatched: Bool = false
-    var shape: Shape
+    var shape: ShapeOptions
     var shading: Shading
     var numberOfShapes: Repeats
     var colorName: ColorChoice
   }
   
-  enum Shape: CaseIterable {
-    case triangle
+  enum ShapeOptions: CaseIterable {
+    case diamond
     case rectangle
     case circle
   }
@@ -44,13 +54,13 @@ struct SetGame {
     case shaded
   }
   
-  enum Repeats {
+  enum Repeats: CaseIterable {
     case single
     case double
     case triple
   }
   
-  enum ColorChoice {
+  enum ColorChoice: CaseIterable {
     case redShape
     case yellowShape
     case blueShape
