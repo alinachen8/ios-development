@@ -48,7 +48,7 @@ struct SetGame {
     case circle
   }
   
-  enum Shading: CaseIterable {
+  enum Shading: Double, CaseIterable {
     case outline
     case filled
     case shaded

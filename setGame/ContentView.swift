@@ -19,34 +19,12 @@ struct ContentView: View {
         dealCards
         LazyVGrid(columns: [GridItem(), GridItem(), GridItem()], content: {
           ForEach(viewModel.cards, id: \.self) { card in
-            
             CardView(card: card).aspectRatio(2/3, contentMode: .fit)
           }
         }).padding(.horizontal)
         Spacer()
       }
     }
-  }
-  
-//  @ViewBuilder
-  private func cardView(for card: SetGameViewModel.Card) -> some View {
-//    var shape = Circle()
-//    switch card.numberOfShapes {
-//      case .single: return 1
-//      case .double: return 2
-//      case .triple: return 3
-//    }
-    
-//    switch card.shape {
-//      case .diamond:
-//        Diamond()
-//      case .rectangle:
-//        Rectangle()
-//      case .circle:
-//        Circle()
-//    }
-//    CardView(card: card)
-    Circle()
   }
   
   var dealCards: some View {
@@ -68,41 +46,38 @@ struct ContentView: View {
 }
 
 struct CardView: View {
+  
   var card: SetGame.Card
   private let colorDict: [String: Color] = ["blue": .blue, "red": .red, "yellow": .yellow]
-//  var opacity: Double
-//
-//  switch card.shading {
-//    case .outline: opacity = 0
-//    case .shaded: opacity = 0.5
-//    case .filled: opacity = 1
-//  }
-  fileprivate func shapeView(for card: SetGame.Card) -> some View {
-    let numberOfShapes: Int = card.numberOfShapes.rawValue
-    
-    return HStack {
-      ForEach(0..<numberOfShapes) { _ in
-        switch card.shape {
-          case .circle:
-            chosenShape(shape1: .circle)
-          case .rectangle:
-            Rectangle()
-          case .diamond:
-            Diamond()
-        }
-      }
-    }.opacity(0.5).foregroundColor(colorDict[card.colorName.rawValue])
+  
+ fileprivate func shapeView(for card: SetGame.Card) -> some View {
+  let numberOfShapes: Int = card.numberOfShapes.rawValue
+  let color = colorDict[card.colorName.rawValue]!
+  let opacity: Double
+  
+  switch card.shading {
+    case .outline: opacity = 0
+    case .shaded: opacity = 0.4
+    case .filled: opacity = 1.0
+  }
+  
+  return HStack {
+    ForEach(0..<numberOfShapes) { _ in
+      chosenShape(shape: card.shape, color: color, opacity: opacity).foregroundColor(color)
+    }
+  }
   }
    
   @ViewBuilder
-  func chosenShape(shape1: SetGame.ShapeOption) -> some View {
-    switch shape1 {
+  func chosenShape(shape: SetGame.ShapeOption, color: Color, opacity: Double) -> some View {
+  
+    switch shape {
       case .circle:
-        Circle().foregroundColor(/*@START_MENU_TOKEN@*/.blue/*@END_MENU_TOKEN@*/)
+        Circle().stroke(color, lineWidth: 2).aspectRatio(1/2, contentMode: .fit).background(Circle().fill(color).opacity(opacity)).padding(7)
       case .rectangle:
-        Rectangle().foregroundColor(/*@START_MENU_TOKEN@*/.blue/*@END_MENU_TOKEN@*/)
+        Rectangle().strokeBorder(Color.purple, lineWidth: 2).aspectRatio(1/2, contentMode: .fit).background(Rectangle().fill(color).opacity(0.5)).aspectRatio(1/2, contentMode: .fit).padding(7)
       case .diamond:
-        Diamond().foregroundColor(/*@START_MENU_TOKEN@*/.blue/*@END_MENU_TOKEN@*/)
+        Diamond().stroke(color, lineWidth: 2).aspectRatio(1/2, contentMode: .fit).background(Diamond().fill(color).opacity(opacity)).aspectRatio(1/2, contentMode: .fit).padding(7)
     }
   }
   
@@ -112,31 +87,9 @@ struct CardView: View {
       cardShape.fill().foregroundColor(.white)
       cardShape.stroke(lineWidth: 3)
       
-      //        put a switch here for view
-      //        Diamond.stroke().foregroundColor(.green).padding(5)
-//      HStack {
-//        var i = 0
-//        repeat {
-//          Diamond()
-//        } while(i <= card.numberOfShapes)
-//      }
-//
-//      switch card.numberOfShapes {
-//        case .single: return 1
-//        case .double: return 2
-//        case .triple: return 3
-//      }
-//      switch card.shading {
-//        case .outline: print("hi")
-//        case .filled:
-//
-//      }
-      
       HStack {
         shapeView(for: card)
-      }.aspectRatio(1/2, contentMode: .fit)
-      
-      //        Text(shapeContent).font(.largeTitle)
+      }
     }
   }
 }
