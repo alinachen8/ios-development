@@ -54,15 +54,15 @@ struct SetGame {
     case shaded
   }
   
-  enum Repeats: CaseIterable {
-    case single
-    case double
-    case triple
+  enum Repeats: Int, CaseIterable {
+    case single = 1
+    case double = 2
+    case triple = 3
   }
   
-  enum ColorChoice: CaseIterable {
-    case redShape
-    case yellowShape
-    case blueShape
+  enum ColorChoice: String, CaseIterable {
+    case redShape = "red"
+    case yellowShape = "yellow"
+    case blueShape = "blue"
   }
 }
