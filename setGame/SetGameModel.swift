@@ -33,13 +33,14 @@ struct SetGame {
     
   }
   
-  struct Card: Hashable {
+  struct Card: Hashable, Identifiable {
     var isSelected: Bool = false
     var isMatched: Bool = false
     var shape: ShapeOption
     var shading: Shading
     var numberOfShapes: Repeats
     var colorName: ColorChoice
+    let id = UUID()
   }
   
   enum ShapeOption: CaseIterable {
@@ -54,7 +55,7 @@ struct SetGame {
     case shaded
   }
   
-  enum Repeats: Int, CaseIterable {
+  enum Repeats: Int, CaseIterable, Hashable {
     case single = 1
     case double = 2
     case triple = 3
@@ -65,4 +66,8 @@ struct SetGame {
     case yellowShape = "yellow"
     case blueShape = "blue"
   }
+}
+ 
+extension SetGame.Repeats: Identifiable {
+  var id: RawValue { rawValue }
 }

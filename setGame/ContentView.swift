@@ -50,6 +50,18 @@ struct CardView: View {
   var card: SetGame.Card
   private let colorDict: [String: Color] = ["blue": .blue, "red": .red, "yellow": .yellow]
   
+  var body: some View {
+    ZStack {
+      let cardShape = RoundedRectangle(cornerRadius: 20)
+      cardShape.fill().foregroundColor(.white)
+      cardShape.stroke(lineWidth: 3)
+      
+      HStack {
+        shapeView(for: card)
+      }
+    }
+  }
+  
  fileprivate func shapeView(for card: SetGame.Card) -> some View {
   let numberOfShapes: Int = card.numberOfShapes.rawValue
   let color = colorDict[card.colorName.rawValue]!
@@ -62,11 +74,11 @@ struct CardView: View {
   }
   
   return HStack {
-    ForEach(0..<numberOfShapes) { _ in
+    ForEach(0..<numberOfShapes, id: \.self) { _ in
       chosenShape(shape: card.shape, color: color, opacity: opacity).foregroundColor(color)
     }
   }
-  }
+}
    
   @ViewBuilder
   func chosenShape(shape: SetGame.ShapeOption, color: Color, opacity: Double) -> some View {
@@ -80,18 +92,7 @@ struct CardView: View {
         Diamond().stroke(color, lineWidth: 2).aspectRatio(1/2, contentMode: .fit).background(Diamond().fill(color).opacity(opacity)).aspectRatio(1/2, contentMode: .fit).padding(7)
     }
   }
-  
-  var body: some View {
-    ZStack {
-      let cardShape = RoundedRectangle(cornerRadius: 20)
-      cardShape.fill().foregroundColor(.white)
-      cardShape.stroke(lineWidth: 3)
-      
-      HStack {
-        shapeView(for: card)
-      }
-    }
-  }
+
 }
 
 struct ContentView_Previews: PreviewProvider {
