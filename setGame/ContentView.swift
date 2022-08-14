@@ -77,26 +77,34 @@ struct CardView: View {
 //    case .shaded: opacity = 0.5
 //    case .filled: opacity = 1
 //  }
-  fileprivate func diamondView(for card: SetGame.Card) -> some View {
+  fileprivate func shapeView(for card: SetGame.Card) -> some View {
     let numberOfShapes: Int = card.numberOfShapes.rawValue
+    
     return HStack {
       ForEach(0..<numberOfShapes) { _ in
-        Diamond().opacity(0.5).foregroundColor(colorDict[card.colorName.rawValue])
+        switch card.shape {
+          case .circle:
+            chosenShape(shape1: .circle)
+          case .rectangle:
+            Rectangle()
+          case .diamond:
+            Diamond()
+        }
       }
+    }.opacity(0.5).foregroundColor(colorDict[card.colorName.rawValue])
+  }
+   
+  @ViewBuilder
+  func chosenShape(shape1: SetGame.ShapeOption) -> some View {
+    switch shape1 {
+      case .circle:
+        Circle().foregroundColor(/*@START_MENU_TOKEN@*/.blue/*@END_MENU_TOKEN@*/)
+      case .rectangle:
+        Rectangle().foregroundColor(/*@START_MENU_TOKEN@*/.blue/*@END_MENU_TOKEN@*/)
+      case .diamond:
+        Diamond().foregroundColor(/*@START_MENU_TOKEN@*/.blue/*@END_MENU_TOKEN@*/)
     }
   }
-//    switch card.numberOfShapes {
-//      case .single:
-//        Diamond().opacity(0.5).foregroundColor(colorDict[card.colorName.rawValue])
-//      case .double:
-//        HStack {
-//          Diamond().opacity(0.5).foregroundColor(colorDict[card.colorName.rawValue])
-//          Diamond().opacity(0.5).foregroundColor(colorDict[card.colorName.rawValue])
-//        }
-//      case .triple:
-//        Diamond().opacity(0.5).foregroundColor(colorDict[card.colorName.rawValue])
-//
-//    }
   
   var body: some View {
     ZStack {
@@ -125,7 +133,7 @@ struct CardView: View {
 //      }
       
       HStack {
-        diamondView(for: card)
+        shapeView(for: card)
       }.aspectRatio(1/2, contentMode: .fit)
       
       //        Text(shapeContent).font(.largeTitle)
