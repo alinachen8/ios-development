@@ -19,7 +19,11 @@ struct ContentView: View {
         dealCards
         LazyVGrid(columns: [GridItem(), GridItem(), GridItem()], content: {
           ForEach(viewModel.cards, id: \.self) { card in
-            CardView(card: card).aspectRatio(2/3, contentMode: .fit)
+            CardView(card: card)
+              .aspectRatio(2/3, contentMode: .fit)
+              .onTapGesture {
+                viewModel.choose(card)
+              }
           }
         }).padding(.horizontal)
         Spacer()

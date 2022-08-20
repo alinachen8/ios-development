@@ -10,12 +10,38 @@ import Foundation
 struct SetGame {
   private(set) var cards: Array<Card>
   
-  func chooseSet(_ card: Card) {
-    
+  func chooseSet(selectedCards: [Card]) -> Bool {
+    let cardShapes: [ShapeOption] = selectedCards.map { $0.shape }
+    if checkIfSet(featureArray: cardShapes) == true {
+      let cardShades: [Shading] = selectedCards.map { $0.shading }
+      if checkIfSet(featureArray: cardShades) == true {
+        let cardColors: [ColorChoice] = selectedCards.map { $0.colorName }
+        if checkIfSet(featureArray: cardColors) == true {
+          let cardShapeNumber: [Repeats] = selectedCards.map { $0.numberOfShapes }
+          if checkIfSet(featureArray: cardShapeNumber) == true {
+            print("its a set!!")
+            return true
+          }
+        }
+      }
+    }
+    print("no set :/")
+    return false
+  }
+  
+  func checkIfSet<Feature>(featureArray: [Feature]) -> Bool where Feature: Equatable & Hashable {
+    let featureSet = Set(featureArray)
+    let setLength = featureSet.count
+    if setLength == 1 {
+      return true
+    } else if setLength == featureArray.count {
+      return true
+    } else {
+      return false
+    }
   }
   
   init() {
-//  init(numberOfPairsOfCards: Int, createCardContent: (Int) -> Shape) {
     cards = Array<Card>()
 // do all cases through enums and populate the cards array
     for shape in ShapeOption.allCases {
@@ -33,7 +59,7 @@ struct SetGame {
     
   }
   
-  struct Card: Hashable, Identifiable {
+  struct Card: Equatable, Hashable, Identifiable {
     var isSelected: Bool = false
     var isMatched: Bool = false
     var shape: ShapeOption
@@ -43,13 +69,13 @@ struct SetGame {
     let id = UUID()
   }
   
-  enum ShapeOption: CaseIterable {
+  enum ShapeOption: Equatable, CaseIterable, Hashable {
     case diamond
     case rectangle
     case circle
   }
   
-  enum Shading: Double, CaseIterable {
+  enum Shading: Double, CaseIterable, Hashable {
     case outline
     case filled
     case shaded
@@ -61,7 +87,7 @@ struct SetGame {
     case triple = 3
   }
   
-  enum ColorChoice: String, CaseIterable {
+  enum ColorChoice: String, CaseIterable, Hashable {
     case redShape = "red"
     case yellowShape = "yellow"
     case blueShape = "blue"

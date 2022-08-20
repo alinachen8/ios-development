@@ -9,12 +9,23 @@ import SwiftUI
 
 
 class SetGameViewModel: ObservableObject {
-  private var model: SetGame = SetGame()
+  @Published private var model: SetGame = SetGame()
   typealias Card = SetGame.Card
   
-  var cards: Array<SetGame.Card> {
+  var cards: Array<Card> {
     return model.cards
   }
-//
+  
+  var chosenArray: Array<Card> = []
+  
+  //  MARK: - Intent(s)
+  
+  func choose(_ card: Card) {
+    chosenArray.append(card)
+    print("hi")
+    if chosenArray.count == 3 {
+      model.chooseSet(selectedCards: chosenArray)
+    }
+  }
   
 }
