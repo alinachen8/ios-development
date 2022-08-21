@@ -58,9 +58,9 @@
 		C78C7D53289E3D9A00BCD0FC /* setGame */ = {
 			isa = PBXGroup;
 			children = (
-				C78C7D56289E3D9A00BCD0FC /* ContentView.swift */,
-				C78C7D7328A1CD9900BCD0FC /* SetGameViewModel.swift */,
 				C78C7D7028A1CC7500BCD0FC /* SetGameModel.swift */,
+				C78C7D7328A1CD9900BCD0FC /* SetGameViewModel.swift */,
+				C78C7D56289E3D9A00BCD0FC /* ContentView.swift */,
 				C78C7D7D28A3737D00BCD0FC /* Diamond.swift */,
 				C78C7D54289E3D9A00BCD0FC /* SetGameApp.swift */,
 				C78C7D58289E3D9C00BCD0FC /* Assets.xcassets */,

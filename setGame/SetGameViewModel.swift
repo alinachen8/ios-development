@@ -16,16 +16,12 @@ class SetGameViewModel: ObservableObject {
     return model.cards
   }
   
-  var chosenArray: Array<Card> = []
+//  var chosenArray: Array<Card> = []
   
   //  MARK: - Intent(s)
   
   func choose(_ card: Card) {
-    chosenArray.append(card)
-    print("hi")
-    if chosenArray.count == 3 {
-      model.chooseSet(selectedCards: chosenArray)
-    }
+    model.chooseCard(selectedCard: card)
   }
   
 }

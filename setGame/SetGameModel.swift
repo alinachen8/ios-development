@@ -9,8 +9,29 @@ import Foundation
 
 struct SetGame {
   private(set) var cards: Array<Card>
+//  need to make this a set
+  var chosenCardsSet: Set<Card> = []
+  var chosenCardsIndexArray: [Int] = []
+  var matchedSetsArray: Array<Card> = []
+
+  mutating func chooseCard(selectedCard: Card) {
+//    need to make it so you can't select the same card twice
+    if let chosenCardIndex = cards.firstIndex(where: { $0.id == selectedCard.id}) {
+      print("chosen card index: \(chosenCardIndex)")
+      cards[chosenCardIndex].isSelected.toggle()
+      if cards[chosenCardIndex].isSelected == true {
+        chosenCardsSet.insert(selectedCard)
+        chosenCardsIndexArray.append(chosenCardIndex)
+        if chosenCardsSet.count == 3 {
+          var setArray = Array(chosenCardsSet)
+          chosenCardsSet.removeAll()
+          chooseSet(selectedCards: setArray, selectedCardsIndices: chosenCardsIndexArray)
+        }
+      }
+    }
+  }
   
-  func chooseSet(selectedCards: [Card]) -> Bool {
+  mutating func chooseSet(selectedCards: [Card], selectedCardsIndices: [Int]) -> Bool {
     let cardShapes: [ShapeOption] = selectedCards.map { $0.shape }
     if checkIfSet(featureArray: cardShapes) == true {
       let cardShades: [Shading] = selectedCards.map { $0.shading }
@@ -20,10 +41,20 @@ struct SetGame {
           let cardShapeNumber: [Repeats] = selectedCards.map { $0.numberOfShapes }
           if checkIfSet(featureArray: cardShapeNumber) == true {
             print("its a set!!")
+            for index in 0..<selectedCards.count {
+//              fix this. bc need to edit the actual cards array
+//             i actually want to pOP IT out of the og array into a matched array
+              cards[selectedCardsIndices[index]].isMatched = true
+            }
             return true
           }
         }
       }
+    }
+    for index in 0..<selectedCards.count {
+//              fix this. bc need to edit the actual cards array
+//             i actually want to pOP IT out of the og array into a matched array
+      cards[selectedCardsIndices[index]].isSelected = false
     }
     print("no set :/")
     return false

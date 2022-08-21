@@ -59,9 +59,15 @@ struct CardView: View {
       let cardShape = RoundedRectangle(cornerRadius: 20)
       cardShape.fill().foregroundColor(.white)
       cardShape.stroke(lineWidth: 3)
-      
       HStack {
         shapeView(for: card)
+      }
+//      need to support deselection
+      if card.isSelected == true {
+        cardShape.foregroundColor(.green).opacity(0.3)
+      }
+      if card.isMatched == true {
+        cardShape.foregroundColor(.white)
       }
     }
   }
@@ -91,7 +97,7 @@ struct CardView: View {
       case .circle:
         Circle().stroke(color, lineWidth: 2).aspectRatio(1/2, contentMode: .fit).background(Circle().fill(color).opacity(opacity)).padding(7)
       case .rectangle:
-        Rectangle().strokeBorder(Color.purple, lineWidth: 2).aspectRatio(1/2, contentMode: .fit).background(Rectangle().fill(color).opacity(0.5)).aspectRatio(1/2, contentMode: .fit).padding(7)
+        Rectangle().strokeBorder(color, lineWidth: 2).aspectRatio(1/2, contentMode: .fit).background(Rectangle().fill(color).opacity(opacity)).aspectRatio(1/2, contentMode: .fit).padding(7)
       case .diamond:
         Diamond().stroke(color, lineWidth: 2).aspectRatio(1/2, contentMode: .fit).background(Diamond().fill(color).opacity(opacity)).aspectRatio(1/2, contentMode: .fit).padding(7)
     }
