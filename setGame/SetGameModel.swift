@@ -25,7 +25,20 @@ struct SetGame {
         if chosenCardsSet.count == 3 {
           var setArray = Array(chosenCardsSet)
           chosenCardsSet.removeAll()
-          chooseSet(selectedCards: setArray, selectedCardsIndices: chosenCardsIndexArray)
+//          move conditions and code for if set/not set here
+          if chooseSet(selectedCards: setArray, selectedCardsIndices: chosenCardsIndexArray) == true {
+            for index in 0..<setArray.count {
+//            need to eventually remove cards from array/view so number of cards decreases
+              cards[chosenCardsIndexArray[index]].isMatched = true
+            }
+          } else {
+            for index in 0..<setArray.count {
+              cards[chosenCardsIndexArray[index]].isSelected = false
+            }
+          }
+          chosenCardsIndexArray = []
+          setArray = []
+          chosenCardsSet.removeAll()
         }
       }
     }
@@ -41,20 +54,10 @@ struct SetGame {
           let cardShapeNumber: [Repeats] = selectedCards.map { $0.numberOfShapes }
           if checkIfSet(featureArray: cardShapeNumber) == true {
             print("its a set!!")
-            for index in 0..<selectedCards.count {
-//              fix this. bc need to edit the actual cards array
-//             i actually want to pOP IT out of the og array into a matched array
-              cards[selectedCardsIndices[index]].isMatched = true
-            }
             return true
           }
         }
       }
-    }
-    for index in 0..<selectedCards.count {
-//              fix this. bc need to edit the actual cards array
-//             i actually want to pOP IT out of the og array into a matched array
-      cards[selectedCardsIndices[index]].isSelected = false
     }
     print("no set :/")
     return false

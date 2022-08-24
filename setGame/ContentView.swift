@@ -13,22 +13,25 @@ struct ContentView: View {
   //  var shapes = (Circle(), Rectangle(), Diamond())
   @State var emojiCount = 12
   var body: some View {
-    ScrollView {
-      VStack{
-        Text("Set").font(.largeTitle)
-        dealCards
-        LazyVGrid(columns: [GridItem(), GridItem(), GridItem()], content: {
-          ForEach(viewModel.cards, id: \.self) { card in
-            CardView(card: card)
-              .aspectRatio(2/3, contentMode: .fit)
-              .onTapGesture {
-                viewModel.choose(card)
-              }
+//    ScrollView {
+//    VStack{
+//      Text("Set").font(.largeTitle)
+//      dealCards
+      AspectVGrid(items: viewModel.cards, aspectRatio: 2/3, content: { card in
+        CardView(card: card)
+          .padding(4)
+          .onTapGesture {
+            viewModel.choose(card)
           }
-        }).padding(.horizontal)
+      })
+//        LazyVGrid(columns: [GridItem(.adaptive(minimum: 100))]) {
+//          ForEach(viewModel.cards, id: \.self) { card in
+//          }
+//        }
+        .padding(.horizontal)
         Spacer()
-      }
-    }
+//    }
+//    }
   }
   
   var dealCards: some View {
@@ -55,21 +58,23 @@ struct CardView: View {
   private let colorDict: [String: Color] = ["blue": .blue, "red": .red, "yellow": .yellow]
   
   var body: some View {
-    ZStack {
-      let cardShape = RoundedRectangle(cornerRadius: 20)
-      cardShape.fill().foregroundColor(.white)
-      cardShape.stroke(lineWidth: 3)
-      HStack {
-        shapeView(for: card)
+    GeometryReader(content: { geometry in
+      ZStack {
+        let cardShape = RoundedRectangle(cornerRadius: 20)
+        cardShape.fill().foregroundColor(.white)
+        cardShape.stroke(lineWidth: 3)
+        HStack {
+          shapeView(for: card)
+        }
+  //      need to support deselection
+        if card.isSelected == true {
+          cardShape.foregroundColor(.green).opacity(0.3)
+        }
+        if card.isMatched == true {
+          cardShape.foregroundColor(.white)
+        }
       }
-//      need to support deselection
-      if card.isSelected == true {
-        cardShape.foregroundColor(.green).opacity(0.3)
-      }
-      if card.isMatched == true {
-        cardShape.foregroundColor(.white)
-      }
-    }
+    })
   }
   
  fileprivate func shapeView(for card: SetGame.Card) -> some View {
