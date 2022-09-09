@@ -13,11 +13,18 @@ struct ContentView: View {
   //  var shapes = (Circle(), Rectangle(), Diamond())
   @State var emojiCount = 12
   var body: some View {
-//    ScrollView {
-//    VStack{
-//      Text("Set").font(.largeTitle)
-//      dealCards
-      AspectVGrid(items: viewModel.cards, aspectRatio: 2/3, content: { card in
+//    is this work I should do in the VM?
+//    let shownCards = viewModel.cards
+    let shownCards = viewModel.cards.filter { $0.isShowing == true
+    }
+    
+    VStack{
+      Text("Set").font(.largeTitle)
+      HStack {
+        dealCards
+        newGame
+      }
+    AspectVGrid(items: shownCards, aspectRatio: 2/3, content: { card in
         CardView(card: card)
           .padding(4)
           .onTapGesture {
@@ -29,27 +36,35 @@ struct ContentView: View {
 //          }
 //        }
         .padding(.horizontal)
-        Spacer()
-//    }
-//    }
+    }
   }
   
   var dealCards: some View {
     Button(action: {
-      if emojiCount < emojis.count {
-        emojiCount += 3
-      }
+      viewModel.dealThreeCards()
     }, label: {
       Text("Deal 3 Cards")
         .padding(4)
         .overlay(
           RoundedRectangle(cornerRadius: 10)
             .stroke(Color.black, lineWidth: 2)
-          //              .background(Color.white)
-          //              .opacity(0.5)
         )
     })
   }
+  
+  var newGame: some View {
+    Button(action: {
+      viewModel.newGame()
+    }, label: {
+      Text("New Game")
+        .padding(4)
+        .overlay(
+          RoundedRectangle(cornerRadius: 10)
+            .stroke(Color.black, lineWidth: 2)
+        )
+    })
+  }
+
 }
 
 struct CardView: View {
@@ -64,7 +79,7 @@ struct CardView: View {
         cardShape.fill().foregroundColor(.white)
         cardShape.stroke(lineWidth: 3)
         HStack {
-          shapeView(for: card)
+          shapeView(for: card).padding(7)
         }
   //      need to support deselection
         if card.isSelected == true {
@@ -100,11 +115,11 @@ struct CardView: View {
   
     switch shape {
       case .circle:
-        Circle().stroke(color, lineWidth: 2).aspectRatio(1/2, contentMode: .fit).background(Circle().fill(color).opacity(opacity)).padding(7)
+        Circle().stroke(color, lineWidth: 2).aspectRatio(1/2, contentMode: .fit).background(Circle().fill(color).opacity(opacity))
       case .rectangle:
-        Rectangle().strokeBorder(color, lineWidth: 2).aspectRatio(1/2, contentMode: .fit).background(Rectangle().fill(color).opacity(opacity)).aspectRatio(1/2, contentMode: .fit).padding(7)
+        Rectangle().strokeBorder(color, lineWidth: 2).aspectRatio(1/2, contentMode: .fit).background(Rectangle().fill(color).opacity(opacity)).aspectRatio(1/2, contentMode: .fit)
       case .diamond:
-        Diamond().stroke(color, lineWidth: 2).aspectRatio(1/2, contentMode: .fit).background(Diamond().fill(color).opacity(opacity)).aspectRatio(1/2, contentMode: .fit).padding(7)
+        Diamond().stroke(color, lineWidth: 2).aspectRatio(1/2, contentMode: .fit).background(Diamond().fill(color).opacity(opacity)).aspectRatio(1/2, contentMode: .fit)
     }
   }
 

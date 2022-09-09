@@ -18,6 +18,7 @@ struct SetGame {
 //    need to make it so you can't select the same card twice
     if let chosenCardIndex = cards.firstIndex(where: { $0.id == selectedCard.id}) {
       print("chosen card index: \(chosenCardIndex)")
+//      fix deselection so that it removes the item from the array 
       cards[chosenCardIndex].isSelected.toggle()
       if cards[chosenCardIndex].isSelected == true {
         chosenCardsSet.insert(selectedCard)
@@ -53,7 +54,20 @@ struct SetGame {
         if checkIfSet(featureArray: cardColors) == true {
           let cardShapeNumber: [Repeats] = selectedCards.map { $0.numberOfShapes }
           if checkIfSet(featureArray: cardShapeNumber) == true {
-            print("its a set!!")
+            let notShownCards = cards.filter { $0.isShowing == false }
+            if notShownCards.count >= 3 {
+              dealThreeCards()
+            } else if notShownCards.isEmpty == false {
+              for index in 0..<notShownCards.count {
+                let cardIndex = cards.firstIndex(where: { $0.id == notShownCards[index].id })!
+                cards[cardIndex].isShowing = true
+              }
+            }
+            
+            for index in selectedCardsIndices {
+              cards[index].isShowing = false
+            }
+            
             return true
           }
         }
@@ -75,6 +89,29 @@ struct SetGame {
     }
   }
   
+  mutating func dealThreeCards() {
+    let notShownCards = cards.filter { $0.isShowing == false && $0.isMatched == false}
+    let newCards = notShownCards[0..<3]
+    for index in 0..<3 {
+      let cardIndex = cards.firstIndex(where: { $0.id == newCards[index].id })!
+      cards[cardIndex].isShowing = true
+    }
+  }
+  
+  mutating func newGame() {
+    cards.shuffle()
+    for index1 in 0..<12 {
+      cards[index1].isShowing = true
+    }
+    for index2 in 12..<cards.count {
+      cards[index2].isShowing = false
+    }
+    for index3 in 0..<cards.count {
+      cards[index3].isMatched = false
+      cards[index3].isSelected = false
+    }
+  }
+  
   init() {
     cards = Array<Card>()
 // do all cases through enums and populate the cards array
@@ -88,12 +125,14 @@ struct SetGame {
         }
       }
     }
-    
-    print(cards.count)
-    
+    cards.shuffle()
+    for index in 0..<12 {
+      cards[index].isShowing = true
+    }
   }
   
   struct Card: Equatable, Hashable, Identifiable {
+    var isShowing: Bool = false
     var isSelected: Bool = false
     var isMatched: Bool = false
     var shape: ShapeOption

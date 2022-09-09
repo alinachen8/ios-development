@@ -16,12 +16,29 @@ class SetGameViewModel: ObservableObject {
     return model.cards
   }
   
-//  var chosenArray: Array<Card> = []
+//  var shownCards = cards[0..<16]
   
+//  var chosenArray: Array<Card> = []
+
   //  MARK: - Intent(s)
   
   func choose(_ card: Card) {
     model.chooseCard(selectedCard: card)
   }
   
+  func dealThreeCards() {
+    model.dealThreeCards()
+  }
+  
+  func newGame() {
+    model.newGame()
+  }
+  
+}
+
+extension Array {
+  func split(numberOfElements: Int, cardArray: Array<Element>) -> ArraySlice<Element> {
+    let newSplitArray = cardArray[0..<numberOfElements]
+    return newSplitArray
+  }
 }
