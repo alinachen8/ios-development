@@ -31,10 +31,6 @@ struct ContentView: View {
             viewModel.choose(card)
           }
       })
-//        LazyVGrid(columns: [GridItem(.adaptive(minimum: 100))]) {
-//          ForEach(viewModel.cards, id: \.self) { card in
-//          }
-//        }
         .padding(.horizontal)
     }
   }
